@@ -35,18 +35,18 @@ practice around the reasoning process rather than a memorized reference architec
 Ordinary LLM chat can already support useful system design learning. This plugin
 adds structure and durable artifacts; it is not proven superior to general chat.
 
-| Mechanism | Additional practice experience |
-|---|---|
-| Repeatable learning protocol | A learner-controlled sequence from framing through reflection |
-| Scenario-grounded dilemmas | Questions attached to a defined fictional business problem |
-| Explicit decision history | Earlier rationale survives changes and a new conversation |
-| Conditional scenario branching | Redis/queue conditions require matching declared components and operations |
-| Deterministic state validation | Invalid transitions and inconsistent stored events are rejected |
-| Progressive disclosure of constraints | Clarifying questions reveal defined facts rather than an initial answer sheet |
-| Non-leading Socratic questions | Instructions probe rationale before suggesting alternatives |
-| Evidence-aware feedback | Principles, assumptions, hypotheses, and recorded tool results remain distinguishable |
-| Architecture visualization | Current and previous declared designs can be inspected locally |
-| Reflection and learning transfer | Recorded evidence supports qualitative feedback and an optional analogous problem |
+| Mechanism                             | Additional practice experience                                                        |
+| ------------------------------------- | ------------------------------------------------------------------------------------- |
+| Repeatable learning protocol          | A learner-controlled sequence from framing through reflection                         |
+| Scenario-grounded dilemmas            | Questions attached to a defined fictional business problem                            |
+| Explicit decision history             | Earlier rationale survives changes and a new conversation                             |
+| Conditional scenario branching        | Redis/queue conditions require matching declared components and operations            |
+| Deterministic state validation        | Invalid transitions and inconsistent stored events are rejected                       |
+| Progressive disclosure of constraints | Clarifying questions reveal defined facts rather than an initial answer sheet         |
+| Non-leading Socratic questions        | Instructions probe rationale before suggesting alternatives                           |
+| Evidence-aware feedback               | Principles, assumptions, hypotheses, and recorded tool results remain distinguishable |
+| Architecture visualization            | Current and previous declared designs can be inspected locally                        |
+| Reflection and learning transfer      | Recorded evidence supports qualitative feedback and an optional analogous problem     |
 
 The code enforces structural rules. Question quality, interpretation, and semantic
 feedback depend on the model and still require human evaluation. Usability and
@@ -312,30 +312,41 @@ and payload. Its JSON must be inside the chosen practice workspace. See the
 
 ## Troubleshooting
 
-| Problem | Action |
-|---|---|
-| Skill missing | Check marketplace/plugin names, restart Claude or `/reload-plugins`; validate both directories. For local loading, point at the plugin subdirectory. |
-| Python too old or unavailable | Run a Python 3.10+ interpreter available to Claude's terminal. On Windows, `py -3` may be appropriate; check its version. The plugin does not install Python. |
-| Cannot write workspace | Choose an existing dedicated writable directory, confirm the destination, and keep normal tool approvals. Do not escalate filesystem permissions automatically. |
-| Symlink/path rejected | Use a direct directory path without symlinks or `..`. Traversal protection is intentional. |
-| Session already exists | Use status/resume or a new session ID. Never overwrite or automatically delete an interrupted session. |
-| Revision conflict | Reload status and reconcile the pending event. Do not force a stale write. |
-| Duplicate event | Identical envelopes are idempotent. A changed payload needs a new ID after reconsideration. |
-| Artifact warning after apply | Canonical state may already be committed. Check status and run render; do not repeat with a new event ID. |
-| Write error with uncertain commit | Check status. Retry the identical event envelope if necessary; idempotency prevents a second mutation after a post-rename interruption. |
-| Interrupted write | Ignore orphan temp files; read canonical state and regenerate with render. Preserve corrupt canonical data for inspection; stale JSONL is not authoritative. |
-| HTML has no terminal preview | Open the returned architecture.html path in a local browser. No browser launch or server is required. |
-| Dilemma not eligible | Check current design, operation purpose/order, phase, prior exploration, and active dilemma; do not force an unrelated incident. |
+| Problem                           | Action                                                                                                                                                          |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Skill missing                     | Check marketplace/plugin names, restart Claude or `/reload-plugins`; validate both directories. For local loading, point at the plugin subdirectory.            |
+| Python too old or unavailable     | Run a Python 3.10+ interpreter available to Claude's terminal. On Windows, `py -3` may be appropriate; check its version. The plugin does not install Python.   |
+| Cannot write workspace            | Choose an existing dedicated writable directory, confirm the destination, and keep normal tool approvals. Do not escalate filesystem permissions automatically. |
+| Symlink/path rejected             | Use a direct directory path without symlinks or `..`. Traversal protection is intentional.                                                                      |
+| Session already exists            | Use status/resume or a new session ID. Never overwrite or automatically delete an interrupted session.                                                          |
+| Revision conflict                 | Reload status and reconcile the pending event. Do not force a stale write.                                                                                      |
+| Duplicate event                   | Identical envelopes are idempotent. A changed payload needs a new ID after reconsideration.                                                                     |
+| Artifact warning after apply      | Canonical state may already be committed. Check status and run render; do not repeat with a new event ID.                                                       |
+| Write error with uncertain commit | Check status. Retry the identical event envelope if necessary; idempotency prevents a second mutation after a post-rename interruption.                         |
+| Interrupted write                 | Ignore orphan temp files; read canonical state and regenerate with render. Preserve corrupt canonical data for inspection; stale JSONL is not authoritative.    |
+| HTML has no terminal preview      | Open the returned architecture.html path in a local browser. No browser launch or server is required.                                                           |
+| Dilemma not eligible              | Check current design, operation purpose/order, phase, prior exploration, and active dilemma; do not force an unrelated incident.                                |
 
-## Contributing / License Status
+## Contributing
 
-Focused contributions should preserve learner control, hypothetical framing,
-original scenario content, primary-source scope, and deterministic safety tests.
-Changes to the installed protocol/source catalog must match the approved copies;
-packaging tests detect drift. Adding a scenario requires reviewing its facts,
-provenance, declarative predicates, version compatibility, and regression/manual
-cases; the v0.1 loader intentionally supports only the coupon scenario.
+Contributions are welcome! System Design Lab is an open-source project focused on helping developers practice software system design and engineering decision-making.
 
-**License selection is pending.** No MIT or other license has been applied.
-The owner must choose an explicit license to clarify public distribution and reuse
-permissions. Third-party source links do not grant rights to redistribute those works.
+When contributing, please follow these principles:
+
+- **Preserve learner autonomy:** Encourage independent reasoning rather than prescribing a single correct architecture.
+- **Maintain educational integrity:** Clearly distinguish hypothetical scenarios, documented engineering principles, and verified results.
+- **Respect source attribution:** Use reliable primary sources and avoid reproducing copyrighted third-party content.
+- **Ensure consistency:** Keep simulation protocols, scenario definitions, and validation rules aligned.
+- **Include tests:** Add appropriate automated tests and manual evaluation cases when introducing or modifying scenarios.
+
+The v0.1 release currently supports the coupon flash-sale scenario. Contributions introducing new scenarios should include documented assumptions, source references, validation rules, and relevant regression tests.
+
+Feel free to open an issue to discuss ideas, report bugs, or suggest improvements before submitting a pull request.
+
+## License
+
+System Design Lab is open-source software licensed under the [MIT License](LICENSE).
+
+You are free to use, modify, distribute, and incorporate this project into personal or commercial applications, provided that the original copyright and license notices are preserved.
+
+Third-party documentation and external resources referenced by this project remain subject to their respective licenses and copyright terms.
