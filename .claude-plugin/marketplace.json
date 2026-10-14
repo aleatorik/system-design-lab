@@ -1,0 +1,13 @@
+{
+  "name": "system-design-lab-marketplace",
+  "owner": {"name": "aleatorik"},
+  "metadata": {"description": "Local conversational system design practice."},
+  "plugins": [
+    {
+      "name": "system-design-lab",
+      "source": "./plugins/system-design-lab",
+      "description": "Practice engineering judgment with fictional scenarios and a persistent decision journal.",
+      "version": "0.1.0"
+    }
+  ]
+}

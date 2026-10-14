@@ -1,0 +1,43 @@
+{
+  "id": "coupon-flash-sale",
+  "version": "0.1",
+  "title": "Coupon Flash Sale",
+  "notice": "All scenarios are fictional educational exercises inspired by documented real-world engineering problems. They do not reproduce any company's actual systems, incidents, or performance measurements.",
+  "brief": "A small commerce team is preparing a limited-time promotion. Design how customers request and receive coupons while explaining the decisions and evidence you would need.",
+  "known_constraints": [
+    {"id": "stock", "text": "At most 1,000 coupons may be issued in this campaign.", "provenance": "fictional_scenario_fact"},
+    {"id": "traffic", "text": "The product team assumes a possible peak of 10,000 incoming requests per second. This is an invented planning input, not a measured capacity.", "provenance": "fictional_scenario_fact"},
+    {"id": "team", "text": "A small team must operate the service; no technology stack is prescribed.", "provenance": "fictional_scenario_fact"}
+  ],
+  "revealable_facts": [
+    {"id": "user-limit", "text": "The initial policy allows one issued coupon per authenticated user per campaign, not across every campaign.", "provenance": "fictional_scenario_fact"},
+    {"id": "issuance", "text": "An issued coupon is a durable grant that the customer can look up after a lost response. A temporary reservation is not yet an issued coupon.", "provenance": "fictional_scenario_fact"},
+    {"id": "confirmation", "text": "Product can accept a clearly labeled pending status if users can reliably look up the final result. No numerical latency target has been set.", "provenance": "fictional_scenario_fact"},
+    {"id": "fairness", "text": "The product team wants an explained, auditable admission policy; strict global arrival ordering has not been promised.", "provenance": "fictional_scenario_fact"},
+    {"id": "budget", "text": "The team prefers modest operational complexity. No monetary budget or database capacity has been measured.", "provenance": "fictional_scenario_fact"}
+  ],
+  "invariants": ["Never issue more than the campaign limit.", "Honor the explicitly agreed user eligibility policy.", "A retry must not silently create an additional grant.", "Explain who owns authoritative issuance state and how incomplete work is recovered."],
+  "learning_topics": ["Concurrency", "Data consistency", "Idempotency", "Safe retries", "Failure recovery", "Traffic admission", "Business constraints", "Trade-off reasoning", "Verification strategy"],
+  "fallback": "For an unfamiliar design, identify its safety invariant, authoritative state owner, critical data flow, failure boundary, and a test that could falsify an assumption. Do not add technologies or invent an observed incident.",
+  "transfer_prompt": "How would your retry and state-ownership reasoning change for a limited inventory reservation that can expire?",
+  "dilemmas": [
+    {"id": "parallel-requests", "preconditions": {"kinds": [], "ordered_steps": []}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical stress test: two eligible requests compete for the last coupon. Which operation decides the outcome in your design, and what invariant would you test?", "sources": ["S05", "S06"], "topics": ["Concurrency", "Data consistency"]},
+    {"id": "ambiguous-retry", "preconditions": {"kinds": [], "ordered_steps": []}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical stress test: the client loses its response after the server may have completed the operation. How does a retry find or safely establish the outcome?", "sources": ["S02", "S03", "S04"], "topics": ["Idempotency", "Safe retries"]},
+    {"id": "redis-db-gap", "preconditions": {"kinds": ["redis", "postgresql"], "ordered_steps": ["redis", "postgresql"]}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical stress test of your declared reservation-then-persist flow: suppose the Redis step succeeds and the following PostgreSQL write fails. How would you detect and reconcile that incomplete operation?", "sources": ["S05", "S07", "S03"], "topics": ["Failure recovery", "Data consistency"]},
+    {"id": "queue-backlog", "preconditions": {"kinds": ["queue"], "ordered_steps": []}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical stress test: your queue receives work faster than consumers complete it as the campaign deadline approaches. What should waiting users observe, and which work remains eligible?", "sources": ["S01", "S04"], "topics": ["Traffic admission", "Failure recovery"]},
+    {"id": "admission-pressure", "preconditions": {"kinds": [], "ordered_steps": []}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical change: requests and retries exceed the capacity you have actually verified, if any. How would you choose an admission policy and communicate rejection or waiting without assuming more infrastructure fixes it?", "sources": ["S01", "S10", "S04"], "topics": ["Traffic admission", "Trade-off reasoning"]},
+    {"id": "policy-change", "preconditions": {"kinds": [], "ordered_steps": []}, "provenance": "hypothetical_consequence", "prompt": "Hypothetical policy change: product proposes one coupon per household instead of per user for a future campaign. Which assumptions need clarification before you revise or defend your design?", "sources": ["S11", "S12"], "topics": ["Business constraints", "Trade-off reasoning"]}
+  ],
+  "sources": [
+    {"id": "S01", "title": "Shopify Engineering: Surviving Flashes of High-Write Traffic, Part I", "url": "https://shopify.engineering/surviving-flashes-of-high-write-traffic-using-scriptable-load-balancers-part-i", "principle": "Traffic shaping also requires decisions about waiting and the customer experience."},
+    {"id": "S02", "title": "Stripe Engineering: Designing robust and predictable APIs with idempotency", "url": "https://stripe.com/blog/idempotency", "principle": "A missing response can leave an ambiguous outcome; a retry contract must account for it."},
+    {"id": "S03", "title": "Amazon Builders' Library: Making retries safe with idempotent APIs", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/", "principle": "Safe repeated requests depend on a deliberate service contract."},
+    {"id": "S04", "title": "Amazon Builders' Library: Timeouts, retries, and backoff with jitter", "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/", "principle": "Retries can add load to a dependency that is already struggling."},
+    {"id": "S05", "title": "PostgreSQL Documentation: Explicit Locking", "url": "https://www.postgresql.org/docs/current/explicit-locking.html", "principle": "Lock modes have specific conflict and transaction-lifetime semantics; contention depends on the actual operations."},
+    {"id": "S06", "title": "PostgreSQL Documentation: Application-level consistency", "url": "https://www.postgresql.org/docs/current/applevel-consistency.html", "principle": "Concurrent updates require an explicit consistency strategy and appropriate transaction boundaries."},
+    {"id": "S07", "title": "Redis Documentation: Transactions", "url": "https://redis.io/docs/latest/develop/using-commands/transactions/", "principle": "Redis-local transaction guarantees do not establish an atomic transaction with a separate PostgreSQL database."},
+    {"id": "S10", "title": "Stripe Engineering: Scaling your API with rate limiters", "url": "https://stripe.com/blog/rate-limiters", "principle": "Admission policies trade demand handling and user experience against finite service capacity."},
+    {"id": "S11", "title": "AWS Well-Architected: Framework Review", "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/wa-framework-review.html", "principle": "Review decisions against workload context and identify improvements rather than a universal architecture."},
+    {"id": "S12", "title": "AWS Well-Architected: Workload and scope", "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/workload-and-scope.html", "principle": "Clarify workload boundaries and dependencies before evaluating design choices."}
+  ]
+}

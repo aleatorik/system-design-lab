@@ -1,0 +1,9 @@
+{
+  "name": "system-design-lab",
+  "version": "0.1.0",
+  "description": "Interactive system design practice with conditional dilemmas, validated local state, and reflection.",
+  "author": {"name": "aleatorik"},
+  "homepage": "https://github.com/aleatorik/system-design-lab",
+  "repository": "https://github.com/aleatorik/system-design-lab",
+  "keywords": ["education", "system-design", "simulation"]
+}
