@@ -51,8 +51,9 @@
 - Installed protocol and source catalog are exact copies of the approved documents;
   tests prevent drift. The state schema documents concrete deviations from their
   illustrative schema/CLI. Public links are passive references; no runtime scraping.
-- No license is added because the owner has not selected one. Repository publication
-  is authorized, but an explicit license is still needed for reuse permissions.
+- No license was selected or added by the implementation agent. A subsequent owner
+  commit declares MIT in README, but no LICENSE file exists yet. That owner change
+  is preserved; completing the intended license file remains a release follow-up.
 
 ## Scope and persistence limits
 
@@ -74,7 +75,8 @@ No benchmark, database, infrastructure experiment, or production deployment is r
 - Final verification results are recorded in docs/VALIDATION.md after execution.
 - Claude plugin validation, clean marketplace installation, interactive Claude skill
   smoke testing, and human learning evaluations: NOT RUN here (Claude CLI unavailable).
-- GitHub Actions is provided; remote CI results must be observed before claiming PASS.
+- GitHub Actions run 38606145670 was observed as successful on owner commit cf39a68:
+  Python 3.10/3.12/3.13 unit and CLI smoke steps all passed. See docs/VALIDATION.md.
 
 ## Repository continuity
 
@@ -84,5 +86,6 @@ planning documents are preserved; README is updated to the implemented behavior.
 User session data, credentials, caches, and .DS_Store are excluded from version control.
 
 Completed: scaffold, scenario, validated runtime, skill, artifact renderers, regression
-tests, public documentation, CI configuration. Remaining release checks are live Claude
-integration, browser review, human behavioral evaluations, and owner license selection.
+tests, public documentation, CI configuration and observed remote CI. Remaining release
+checks are live Claude integration, browser review, human behavioral evaluations, and
+completion of the intended license file. Owner commit cf39a68 is preserved.

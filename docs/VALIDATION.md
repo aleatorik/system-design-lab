@@ -18,6 +18,7 @@ using the installed Python 3.10 interpreter explicitly. No dependencies were ins
 | CSP hashes match emitted script/style bytes | PASS in a local parser/hash check | Browser enforcement not tested here |
 | Runtime static execution audit | PASS: no eval/exec/compile/dynamic import calls | Static check of bundled Python scripts |
 | Publication file/secret-pattern audit | PASS: 22 eligible files; no matching keys, sessions, symlinks, caches, or local configuration | Pattern-based review, not a universal secret detector |
+| GitHub Actions on commit cf39a689ae9fba451e529d10c629c22478263084 | PASS: Python 3.10, 3.12, and 3.13 jobs; unit suite and CLI smoke successful in all three | Remote Linux verification; no Claude CLI tests |
 | `claude plugin validate ./plugins/system-design-lab` | NOT RUN: command unavailable (exit 127) | No Claude CLI installed |
 | `claude plugin validate .` | NOT RUN: command unavailable (exit 127) | No Claude CLI installed |
 | `claude --plugin-dir ./plugins/system-design-lab` and live skill dialogue | NOT RUN | Claude CLI/authenticated conversation unavailable |
@@ -55,8 +56,14 @@ It is not a transcript of `/system-design-lab:simulate` or proof of educational 
 
 Before push, review the exact staged file list and run a secret-pattern/file audit.
 Use only the authorized repository and normal fast-forward push. GitHub Actions
-configuration exists for Python 3.10/3.12/3.13; a remote workflow result is separate
-from local testing. Remote commit and CI status are checked after push when accessible.
+configuration exists for Python 3.10/3.12/3.13. All three jobs' unit and smoke steps
+passed in [the observed remote run](https://github.com/aleatorik/system-design-lab/actions/runs/38606145670)
+on commit cf39a689ae9fba451e529d10c629c22478263084. This is separate from local testing
+and does not establish live Claude integration. Documentation-only follow-up commits
+do not change the runtime tested by that run.
 
-No license is selected. Owner license selection, fresh installation, real Claude
-conversation, browser review, and user evaluations remain release follow-ups.
+The implementation commit is f27b557. A subsequent owner commit, cf39a68, updates
+README to declare MIT and adds an ignore entry; it is preserved. No LICENSE file
+exists in the tracked tree. Confirming and adding the complete intended license,
+fresh installation, real Claude conversation, browser review, and user evaluations
+remain release follow-ups. The owner README change is not overwritten.
